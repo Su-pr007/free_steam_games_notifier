@@ -88,10 +88,8 @@ func (botData BotData) StartWaitingForGames() {
 func formatText(gamesList []*entity.Game) string {
 	result := "Бесплатные игры: \n"
 
-	i := 0
 	for _, game := range gamesList {
-		i++
-		result += "- <b>" + game.Name + " " + game.Link + "</b>\n"
+		result += fmt.Sprintf("- <b>%s %s</b>\n", game.Name, game.Link)
 	}
 
 	return result

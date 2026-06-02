@@ -13,7 +13,6 @@ import (
 	repository "steamGamesSales/internal/repository/postgres"
 	"syscall"
 
-	"github.com/gin-gonic/gin"
 	"github.com/jmoiron/sqlx"
 )
 
@@ -42,8 +41,6 @@ func main() {
 	cfg := config.MustLoadConfig()
 
 	log := initLogger()
-
-	gin.SetMode(cfg.App.Env)
 
 	db := getDb(cfg)
 

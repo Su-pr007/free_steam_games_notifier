@@ -3,7 +3,7 @@ GET https://store.steampowered.com/search/results/
     ?query
     &start=0
     &count=200
-    &maxprice=150
+    &maxprice=free
     &specials=1
     &infinite=1 HTTP/1.1
 
