@@ -1,0 +1,9 @@
+### Get steam free games list
+GET https://store.steampowered.com/search/results/
+    ?query
+    &start=0
+    &count=200
+    &maxprice=150
+    &specials=1
+    &infinite=1 HTTP/1.1
+
