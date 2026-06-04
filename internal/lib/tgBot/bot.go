@@ -22,23 +22,13 @@ type BotData struct {
 	proxy             *url.URL
 }
 
-func mockBotAPI() *tgbotapi.BotAPI {
-	return &tgbotapi.BotAPI{
-		Token:  "",
-		Debug:  false,
-		Buffer: 0,
-		Self:   tgbotapi.User{},
-		Client: nil,
-	}
-}
-
 func NewBot(log *slog.Logger, token string, repo *repository.Repository, newFreeGamesEvent chan []entity.Game, proxy *url.URL) *BotData {
 	return &BotData{
 		log,
 		token,
 		repo,
 		newFreeGamesEvent,
-		mockBotAPI(),
+		nil,
 		proxy,
 	}
 }
