@@ -1,6 +1,9 @@
 services:
   go:
     image: ghcr.io/su-pr007/freesteamgamesparser-go:latest
+    build:
+      context: ./
+      dockerfile: ./cmd/bot/Dockerfile
     restart: on-failure
     depends_on:
       - pg
