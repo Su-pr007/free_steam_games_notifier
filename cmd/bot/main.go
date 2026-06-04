@@ -41,9 +41,7 @@ func (initData Cron) initService() *cron.Cron {
 
 func main() {
 	cfg := config.MustLoadConfig()
-
 	log := initLogger()
-
 	db := getDb(cfg)
 
 	repo := repository.NewRepository(db)
@@ -96,7 +94,6 @@ func initLogger() *slog.Logger {
 			Level: slog.LevelDebug,
 		},
 	}
-	log := slog.New(logger.NewPrettyHandler(os.Stdout, opts))
 
-	return log
+	return slog.New(logger.NewPrettyHandler(os.Stdout, opts))
 }

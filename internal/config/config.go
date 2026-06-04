@@ -68,10 +68,10 @@ func MustLoadConfig() *Config {
 	cfg.DB.DBName = getEnv("DB_NAME")
 	cfg.DB.SSL = getEnv("DB_SSL")
 	cfg.TgBot.Token = getEnv("TG_BOT_TOKEN")
-	cfg.Proxy.Scheme = getEnv("TG_PROXY_SCHEME")
-	cfg.Proxy.Host = getEnv("TG_PROXY_HOST")
-	cfg.Proxy.User = getEnv("TG_PROXY_USER")
-	cfg.Proxy.Password = getEnv("TG_PROXY_PASSWORD")
+	cfg.Proxy.Scheme = getEnv("PROXY_SCHEME")
+	cfg.Proxy.Host = getEnv("PROXY_HOST")
+	cfg.Proxy.User = getEnv("PROXY_USER")
+	cfg.Proxy.Password = getEnv("PROXY_PASSWORD")
 
 	if err = cleanenv.ReadEnv(&cfg); err != nil {
 		panic("failed to load config from environment: " + err.Error())
