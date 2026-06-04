@@ -14,7 +14,7 @@ type Chat interface {
 }
 
 type Game interface {
-	Create(game *entity.Game) error
+	Create(game entity.Game) error
 	Get(string) (*entity.Game, error)
 	Update(game *entity.Game) error
 }

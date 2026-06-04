@@ -91,7 +91,7 @@ func (r *ChatPostgres) GetSubscribed() ([]entity.Chat, error) {
 
 // Games
 
-func (r *GamePostgres) Create(game *entity.Game) error {
+func (r *GamePostgres) Create(game entity.Game) error {
 	query := fmt.Sprintf(
 		"INSERT INTO %s (id, name, link, image_link, date_add) VALUES ($1, $2, $3, $4, $5)",
 		gamesTable,

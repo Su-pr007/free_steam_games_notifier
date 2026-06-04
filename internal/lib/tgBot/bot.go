@@ -15,7 +15,7 @@ type BotData struct {
 	log               *slog.Logger
 	token             string
 	repo              *repository.Repository
-	newFreeGamesEvent chan []*entity.Game
+	newFreeGamesEvent chan []entity.Game
 	bot               *tgbotapi.BotAPI
 }
 
@@ -29,7 +29,7 @@ func mockBotAPI() *tgbotapi.BotAPI {
 	}
 }
 
-func NewBot(log *slog.Logger, token string, repo *repository.Repository, newFreeGamesEvent chan []*entity.Game) *BotData {
+func NewBot(log *slog.Logger, token string, repo *repository.Repository, newFreeGamesEvent chan []entity.Game) *BotData {
 	return &BotData{
 		log,
 		token,
@@ -85,7 +85,7 @@ func (botData BotData) StartWaitingForGames() {
 	}
 }
 
-func formatText(gamesList []*entity.Game) string {
+func formatText(gamesList []entity.Game) string {
 	result := "Бесплатные игры: \n"
 
 	for _, game := range gamesList {

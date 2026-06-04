@@ -20,7 +20,7 @@ type TgBot struct {
 	logger            *slog.Logger
 	botToken          string
 	repo              *repository.Repository
-	newFreeGamesEvent chan []*entity.Game
+	newFreeGamesEvent chan []entity.Game
 }
 
 func (initData TgBot) initService() *tgBot.BotData {
@@ -30,7 +30,7 @@ func (initData TgBot) initService() *tgBot.BotData {
 type Cron struct {
 	logger            *slog.Logger
 	repo              *repository.Repository
-	newFreeGamesEvent chan []*entity.Game
+	newFreeGamesEvent chan []entity.Game
 }
 
 func (initData Cron) initService() *cron.Cron {
@@ -46,7 +46,7 @@ func main() {
 
 	repo := repository.NewRepository(db)
 
-	newFreeGamesChannel := make(chan []*entity.Game)
+	newFreeGamesChannel := make(chan []entity.Game)
 
 	botService := TgBot{
 		logger:            log,

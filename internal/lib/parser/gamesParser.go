@@ -30,10 +30,10 @@ var steamSearchParams = map[string]string{
 type GamesParser struct {
 	log               *slog.Logger
 	repo              *repository.Repository
-	newFreeGamesEvent chan []*entity.Game
+	newFreeGamesEvent chan []entity.Game
 }
 
-func NewGamesParser(log *slog.Logger, repo *repository.Repository, newFreeGamesEvent chan []*entity.Game) *GamesParser {
+func NewGamesParser(log *slog.Logger, repo *repository.Repository, newFreeGamesEvent chan []entity.Game) *GamesParser {
 	return &GamesParser{
 		log:               log,
 		repo:              repo,
@@ -43,7 +43,7 @@ func NewGamesParser(log *slog.Logger, repo *repository.Repository, newFreeGamesE
 
 func (gamesParser *GamesParser) Run() {
 	start := 0
-	newGames := make([]*entity.Game, 0)
+	newGames := make([]entity.Game, 0)
 
 	for {
 		responseBody := gamesParser.Request(start)
@@ -78,11 +78,11 @@ func (gamesParser *GamesParser) Run() {
 	gamesParser.sendNotification(newGames)
 }
 
-func (gamesParser *GamesParser) filterNewGames(games []entity.Game) (result []*entity.Game) {
+func (gamesParser *GamesParser) filterNewGames(games []entity.Game) (result []entity.Game) {
 	for _, game := range games {
 		addedGame, _ := gamesParser.repo.Game.Get(game.Id)
 		if addedGame == nil {
-			result = append(result, &game)
+			result = append(result, game)
 		}
 	}
 
@@ -159,7 +159,7 @@ func (gamesParser *GamesParser) parseHtml(body ResponseData) []entity.Game {
 	return result
 }
 
-func (gamesParser *GamesParser) sendNotification(games []*entity.Game) {
+func (gamesParser *GamesParser) sendNotification(games []entity.Game) {
 	if len(games) == 0 {
 		return
 	}
