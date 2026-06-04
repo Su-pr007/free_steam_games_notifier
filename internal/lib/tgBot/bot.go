@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"log"
 	"log/slog"
+	"net/http"
+	"net/url"
 	"steamGamesSales/internal/entity"
 	repository "steamGamesSales/internal/repository/postgres"
 	"strconv"
@@ -17,6 +19,7 @@ type BotData struct {
 	repo              *repository.Repository
 	newFreeGamesEvent chan []entity.Game
 	bot               *tgbotapi.BotAPI
+	proxy             *url.URL
 }
 
 func mockBotAPI() *tgbotapi.BotAPI {
@@ -29,17 +32,18 @@ func mockBotAPI() *tgbotapi.BotAPI {
 	}
 }
 
-func NewBot(log *slog.Logger, token string, repo *repository.Repository, newFreeGamesEvent chan []entity.Game) *BotData {
+func NewBot(log *slog.Logger, token string, repo *repository.Repository, newFreeGamesEvent chan []entity.Game, proxy *url.URL) *BotData {
 	return &BotData{
 		log,
 		token,
 		repo,
 		newFreeGamesEvent,
 		mockBotAPI(),
+		proxy,
 	}
 }
 func (botData BotData) InitBot() *BotData {
-	botObject, err := tgbotapi.NewBotAPI(botData.token)
+	botObject, err := botData.buildBotApi()
 	if err != nil {
 		panic(err)
 	}
@@ -49,6 +53,26 @@ func (botData BotData) InitBot() *BotData {
 	botData.bot = botObject
 
 	return &botData
+}
+
+func (botData BotData) buildBotApi() (*tgbotapi.BotAPI, error) {
+	if botData.proxy == nil {
+		botApi, err := tgbotapi.NewBotAPI(botData.token)
+		if err != nil {
+			panic(err)
+		}
+
+		return botApi, nil
+	}
+
+	client := &http.Client{
+		Transport: &http.Transport{
+			Proxy: http.ProxyURL(botData.proxy),
+		},
+	}
+	botObject, err := tgbotapi.NewBotAPIWithClient(botData.token, tgbotapi.APIEndpoint, client)
+
+	return botObject, err
 }
 
 func (botData BotData) StartListening() {

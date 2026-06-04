@@ -1,6 +1,7 @@
 package config
 
 import (
+	"net/url"
 	"os"
 
 	"github.com/ilyakaznacheev/cleanenv"
@@ -11,6 +12,7 @@ type Config struct {
 	App   AppConfig
 	DB    DBConfig
 	TgBot BotConfig
+	Proxy ProxyConfig
 }
 
 type AppConfig struct {
@@ -31,6 +33,25 @@ type BotConfig struct {
 	ChannelId string
 }
 
+type ProxyConfig struct {
+	Scheme   string
+	Host     string
+	User     string
+	Password string
+}
+
+func (c ProxyConfig) GetUrl() *url.URL {
+	if c.Scheme == "" || c.Host == "" || c.User == "" || c.Password == "" {
+		return nil
+	}
+
+	return &url.URL{
+		Scheme: c.Scheme,
+		User:   url.UserPassword(c.User, c.Password),
+		Host:   c.Host,
+	}
+}
+
 func MustLoadConfig() *Config {
 	err := godotenv.Load()
 	if err != nil {
@@ -47,6 +68,10 @@ func MustLoadConfig() *Config {
 	cfg.DB.DBName = getEnv("DB_NAME")
 	cfg.DB.SSL = getEnv("DB_SSL")
 	cfg.TgBot.Token = getEnv("TG_BOT_TOKEN")
+	cfg.Proxy.Scheme = getEnv("TG_PROXY_SCHEME")
+	cfg.Proxy.Host = getEnv("TG_PROXY_HOST")
+	cfg.Proxy.User = getEnv("TG_PROXY_USER")
+	cfg.Proxy.Password = getEnv("TG_PROXY_PASSWORD")
 
 	if err = cleanenv.ReadEnv(&cfg); err != nil {
 		panic("failed to load config from environment: " + err.Error())

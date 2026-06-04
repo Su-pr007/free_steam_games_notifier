@@ -1,23 +1,23 @@
 -include .env
 export
 
-up:
-	$(DOCKER_COMPOSE_COMMAND) up -d
-
 build:
 	$(DOCKER_COMPOSE_COMMAND) -f docker-compose.build.yaml build
 
-up-prod:
+up:
 	$(DOCKER_COMPOSE_COMMAND) -f docker-compose.prod.yaml up -d
 
-release-prod:
+down:
+	$(DOCKER_COMPOSE_COMMAND) -f docker-compose.prod.yaml down
+
+release:
 	$(DOCKER_COMPOSE_COMMAND) -f docker-compose.prod.yaml down
 	$(DOCKER_COMPOSE_COMMAND) -f docker-compose.prod.yaml up -d
 
-ps-prod:
+ps:
 	$(DOCKER_COMPOSE_COMMAND) -f docker-compose.prod.yaml ps -a
 
-logs-prod:
+logs:
 	$(DOCKER_COMPOSE_COMMAND) -f docker-compose.prod.yaml logs
 
 push:

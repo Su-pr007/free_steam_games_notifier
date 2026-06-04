@@ -1,5 +1,5 @@
 services:
-  go:
+  bot:
     image: ghcr.io/su-pr007/freesteamgamesparser-go:latest
     restart: on-failure
     depends_on:

@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"log/slog"
+	"net/url"
 	"os"
 	"os/signal"
 	"steamGamesSales/internal/config"
@@ -21,10 +22,11 @@ type TgBot struct {
 	botToken          string
 	repo              *repository.Repository
 	newFreeGamesEvent chan []entity.Game
+	proxy             *url.URL
 }
 
 func (initData TgBot) initService() *tgBot.BotData {
-	return tgBot.NewBot(initData.logger, initData.botToken, initData.repo, initData.newFreeGamesEvent).InitBot()
+	return tgBot.NewBot(initData.logger, initData.botToken, initData.repo, initData.newFreeGamesEvent, initData.proxy).InitBot()
 }
 
 type Cron struct {
@@ -53,6 +55,7 @@ func main() {
 		botToken:          cfg.TgBot.Token,
 		repo:              repo,
 		newFreeGamesEvent: newFreeGamesChannel,
+		proxy:             cfg.Proxy.GetUrl(),
 	}.initService()
 	cronService := Cron{
 		logger:            log,
