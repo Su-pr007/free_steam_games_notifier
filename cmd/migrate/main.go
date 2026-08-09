@@ -1,7 +1,9 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
+	"os"
 	"steamGamesSales/internal/config"
 	repository "steamGamesSales/internal/repository/postgres"
 
@@ -12,6 +14,7 @@ import (
 )
 
 func main() {
+	reader := bufio.NewReader(os.Stdin)
 	cfg := config.MustLoadConfig()
 
 	db, err := repository.ConnectDb(repository.Config{
@@ -43,6 +46,13 @@ func main() {
 		return
 	}
 
+	args := os.Args[1:]
+
+	if len(args) > 0 {
+		handleArgs(args, reader, m)
+		return
+	}
+
 	// Применение всех миграций
 	err = m.Up()
 	if err != nil && err != migrate.ErrNoChange {
@@ -51,4 +61,38 @@ func main() {
 	}
 
 	fmt.Println("Все миграции успешно применены")
+}
+
+func handleArgs(args []string, reader *bufio.Reader, m *migrate.Migrate) {
+	if args[0] == "down" {
+		fmt.Print("Вы уверены? (y/N)")
+		sure, err2 := reader.ReadString('\n')
+		if err2 != nil {
+			fmt.Println(err2)
+			return
+		}
+		if sure == "y" {
+			err := m.Down()
+			if err != nil {
+				fmt.Println(err)
+				return
+			}
+
+			fmt.Println("Успех")
+		}
+
+		return
+	}
+
+	if args[0] == "stepback" {
+		err := m.Steps(-1)
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+
+		fmt.Println("Последняя миграция успешно отменена")
+
+		return
+	}
 }

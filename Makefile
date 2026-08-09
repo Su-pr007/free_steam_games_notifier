@@ -11,6 +11,7 @@ down:
 	$(DOCKER_COMPOSE_COMMAND) -f docker-compose.prod.yaml down
 
 release:
+	docker pull ghcr.io/su-pr007/freesteamgamesparser-go:latest
 	$(DOCKER_COMPOSE_COMMAND) -f docker-compose.prod.yaml down
 	$(DOCKER_COMPOSE_COMMAND) -f docker-compose.prod.yaml up -d
 

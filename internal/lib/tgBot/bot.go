@@ -75,7 +75,7 @@ func (botData BotData) StartListening() {
 		if update.Message == nil {
 			continue
 		}
-		log.Printf("Text: %s\n", update.Message.Text)
+		log.Printf("%s: %s\n", update.Message.From.UserName, update.Message.Text)
 		if update.Message.Text == "/start" {
 			startHandler(update, botData)
 		}
